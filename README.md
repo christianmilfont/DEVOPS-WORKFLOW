@@ -10,6 +10,7 @@ O projeto foi criado com foco da documentação de jogos, preços e suas respect
 - **Tecnologia:** .NET 9 (ou versão do seu projeto)
 - **Banco de Dados:** Azure SQL Database
 - **Hospedagem:** Azure App Service
+- **Monitoramento:** Application Insights
 
 ---
 
@@ -33,7 +34,12 @@ O deploy foi feito diretamente pelo portal do Azure seguindo os passos abaixo:
      - **Servidor:** Crie um novo servidor ou utilize um existente
      - **Autenticação:** SQL Server Authentication (usuário e senha)
    - Clique em **Revisar + Criar → Criar**.
-
+   - 
+**Habilitar Application Insights**
+   - No App Service, vá em **Configurações → Application Insights**.
+   - Clique em **Ativar**, crie um recurso novo ou utilize um existente.
+   - Isso permitirá monitoramento de logs, métricas e desempenho da API.
+     
 3. **Configurar Connection String**
    - No App Service, vá em **Configurações → Configurações de Aplicativo**.
    - Adicione a **Connection String** do banco:
@@ -76,9 +82,14 @@ az group create --name MeuGrupoRecursos --location brazilsouth
 ```
 az appservice plan create --name MeuPlano --resource-group MeuGrupoRecursos --sku B1 --is-linux
 ```
-### 3.4 Criar Web App
+### 3.4 Criar Web App com Application Insights
+#### Criar Application Insights
 ```
-az webapp create --resource-group MeuGrupoRecursos --plan MeuPlano --name NomeDoApp --runtime "DOTNET|9.0"
+az monitor app-insights component create --app MeuAppInsights --location brazilsouth --resource-group MeuGrupoRecursos --application-type web
+```
+#### Criar Web App
+```
+az webapp create --resource-group MeuGrupoRecursos --plan MeuPlano --name NomeDoApp --runtime "DOTNET|9.0" --app-insights MeuAppInsights
 ```
 ### 3.5 Criar Banco Azure SQL
 ```
@@ -107,6 +118,7 @@ dotnet publish -c Release -o ./publish
 Certifique-se de que a porta 1433 está liberada no firewall do Azure SQL Server.
 Atualize a Connection String antes de publicar.
 Para logs e diagnósticos, use o Azure Monitor ou habilite Application Insights.
+Application Insights está habilitado para monitoramento da API.
 
 ## 5. Referências
 
