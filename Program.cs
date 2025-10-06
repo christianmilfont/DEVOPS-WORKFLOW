@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-// Connection string do appsettings.json ou vari�vel de ambiente
+// Connection string do appsettings.json ou variável de ambiente
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Configura o EF Core com SQL Server
@@ -19,18 +17,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Forçar Swagger em qualquer ambiente
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DEVOPS5 API V1");
+});
+
+// Redirecionar raiz para Swagger
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger/index.html");
+    return Task.CompletedTask;
+});
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
