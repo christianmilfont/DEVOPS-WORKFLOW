@@ -7,9 +7,10 @@
 -- Criação do banco (opcional - se você quiser criar manualmente no Azure, pode omitir)
 CREATE DATABASE GameCatalogDB;
 GO
-
-USE GameCatalogDB;
-GO
+-- ===========================================
+-- Script de criação das tabelas Master-Detail
+-- Para Azure SQL Database
+-- ===========================================
 
 -- ===========================================
 -- TABELA MASTER: Games
@@ -24,24 +25,7 @@ CREATE TABLE Games (
 );
 GO
 
--- ===========================================
--- TABELA DETAIL: GameDetails
--- Cada jogo pode ter vários detalhes (por exemplo, plataforma, idioma, descrição)
--- ===========================================
-CREATE TABLE GameDetails (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    GameId INT NOT NULL,
-    Platform NVARCHAR(50) NOT NULL,
-    Language NVARCHAR(50) NOT NULL,
-    Description NVARCHAR(255),
-    CreatedAt DATETIME2 DEFAULT GETDATE(),
 
-    CONSTRAINT FK_GameDetails_Games FOREIGN KEY (GameId)
-        REFERENCES Games(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-GO
 
 -- ===========================================
 -- DADOS INICIAIS (opcionais)
@@ -53,11 +37,24 @@ VALUES
 ('Forza Horizon 5', 'Racing', 299.90, '2021-11-09');
 GO
 
-INSERT INTO GameDetails (GameId, Platform, Language, Description)
+SELECT * FROM Games;
+INSERT INTO Games (Title, Genre, Price, ReleaseDate)
 VALUES
-(1, 'PC', 'English', 'Action RPG in an open world.'),
-(1, 'Xbox', 'Portuguese', 'Versão com dublagem PT-BR.'),
-(2, 'Xbox', 'English', 'Sci-fi shooter from Microsoft.'),
-(3, 'PC', 'Spanish', 'Racing across Mexico.'),
-(3, 'Xbox', 'Portuguese', 'Jogo de corrida em mundo aberto.');
+('Jogos', 'RPG', 200.90, '2015-05-19');
 GO
+
+-- Atualiza o preço do jogo com Id = 1
+UPDATE Games
+SET Price = 179.90
+WHERE Id = 1;
+GO
+-- Altera a data de lançamento para '2025-01-01' para todos jogos do gênero 'RPG'
+UPDATE Games
+SET ReleaseDate = '2025-01-01'
+WHERE Genre = 'RPG';
+GO
+-- Deleta o jogo com Id = 2
+DELETE FROM Games
+WHERE Id = 2;
+GO
+
