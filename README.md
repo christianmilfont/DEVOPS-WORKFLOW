@@ -126,3 +126,94 @@ Application Insights está habilitado para monitoramento da API.
 - Documentação Azure SQL Database
 - Azure CLI
 - Vídeo explicativo de Deploy utilizando github actions no youtube: https://www.youtube.com/watch?v=giCR4VgKjQY
+
+
+## Endpoints da API
+
+**Base URL (exemplo Azure):**
+
+---
+
+### GET `/api/Game`
+
+**Descrição:** Retorna todos os jogos cadastrados.
+
+**Exemplo de requisição:**
+```bash
+curl -X GET https://<seu-appservice>.azurewebsites.net/api/GameController
+```
+```
+[
+  {
+    "id": 1,
+    "title": "The Witcher 3",
+    "genre": "RPG",
+    "price": 199.90,
+    "releaseDate": "2015-05-19",
+    "createdAt": "2025-10-06T18:00:00Z"
+  }
+]
+```
+
+### GET /api/Game/{id}
+
+Descrição: Retorna um jogo específico pelo Id.
+```
+curl -X GET https://<seu-appservice>.azurewebsites.net/api/GameController/1
+```
+```
+{
+  "id": 1,
+  "title": "The Witcher 3",
+  "genre": "RPG",
+  "price": 199.90,
+  "releaseDate": "2015-05-19",
+  "createdAt": "2025-10-06T18:00:00Z"
+}
+```
+
+### POST /api/Game
+
+Descrição: Cria um novo jogo no catálogo.
+```
+{
+  "title": "Halo Infinite",
+  "genre": "FPS",
+  "price": 249.90,
+  "releaseDate": "2021-12-08"
+}
+```
+Exemo de Requisição:
+```
+curl -X POST https://<seu-appservice>.azurewebsites.net/api/Game \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Halo Infinite",
+    "genre": "FPS",
+    "price": 249.90,
+    "releaseDate": "2021-12-08"
+  }'
+```
+
+### PUT /api/Game/{id}
+
+Descrição: Atualiza um jogo existente.
+```
+curl -X PUT https://<seu-appservice>.azurewebsites.net/api/Game/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "The Witcher 3",
+    "genre": "RPG",
+    "price": 179.90,
+    "releaseDate": "2025-01-01"
+  }'
+```
+
+### DELETE /api/Game/{id}
+
+Descrição: Remove um jogo pelo seu Id.
+
+Exemplo de requisição:
+```
+curl -X DELETE https://<seu-appservice>.azurewebsites.net/api/Game/2
+```
